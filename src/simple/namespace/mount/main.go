@@ -1,8 +1,7 @@
 // +build linux
 
-// import前的+build编译运行平台，否则调用将会出现not found异常
-// Linux系统
-// UTS Namespaces 主要用来隔离domain namespace 和node namespace 两个系统标识。
+// 在Mount Namespace中调用mount() 与 umount() 仅影响当前Namespace下的文件系统
+// 而针对全局文件系统并无影响;Docker mount挂载则是利用此特性实现。
 package main
 
 import (
@@ -15,11 +14,12 @@ import (
 func main() {
 	cmd := exec.Command("sh")
 	cmd.SysProcAttr = &syscall.SysProcAttr{
-		Cloneflags: syscall.CLONE_NEWUTS,
+		Cloneflags: syscall.CLONE_NEWNS,
 	}
 	cmd.Stdin = os.Stdin
 	cmd.Stdout = os.Stdout
 	cmd.Stderr = os.Stderr
+
 	if err := cmd.Run(); err != nil {
 		log.Fatal(err)
 	}
