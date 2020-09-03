@@ -44,11 +44,11 @@ func main() {
 		fmt.Printf("%v", cmd.Process.Pid)
 
 		// 在`挂载了memory subsystem的hierarchy的根目录`上创建新的cgroup
-		os.Mkdir(path.Join(cgroupMemoryHierarchyMount, "testmemorylimit"), os.FileMode(0755).Perm())
+		os.Mkdir(path.Join(cgroupMemoryHierarchyMount, "testmemorylimit"), 0755)
 		// 将容器进程放进此cgroup中
-		ioutil.WriteFile(path.Join(cgroupMemoryHierarchyMount, "testmemorylimit", "tasks"), []byte(strconv.Itoa(cmd.Process.Pid)), os.FileMode(0644).Perm())
+		ioutil.WriteFile(path.Join(cgroupMemoryHierarchyMount, "testmemorylimit", "tasks"), []byte(strconv.Itoa(cmd.Process.Pid)), 0644)
 		// 限制进程memory
-		ioutil.WriteFile(path.Join(cgroupMemoryHierarchyMount, "testmemorylimit", "memory.limit_in_bytes"), []byte("100m"), os.FileMode(0644).Perm())
+		ioutil.WriteFile(path.Join(cgroupMemoryHierarchyMount, "testmemorylimit", "memory.limit_in_bytes"), []byte("300m"), 0644)
 
 		cmd.Process.Wait()
 	}
