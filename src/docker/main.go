@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"github.com/bungeerope/simple-docker/src/docker/container"
+	"github.com/bungeerope/simple-docker/src/docker/subsystem"
 	logger "github.com/sirupsen/logrus"
 	"github.com/urfave/cli"
 	"os"
@@ -32,14 +33,41 @@ var runCommand = cli.Command{
 			Name:  "ti",
 			Usage: "enable tty",
 		},
+		cli.BoolFlag{
+			Name:  "m",
+			Usage: "memory limit",
+		},
+		cli.BoolFlag{
+			Name:  "c",
+			Usage: "cpuset limit",
+		},
+		cli.BoolFlag{
+			Name:  "cs",
+			Usage: "cpushare limit",
+		},
 	},
 	Action: func(context *cli.Context) error {
 		if len(context.Args()) < 1 {
 			return fmt.Errorf("Missing container command")
 		}
-		cmd := context.Args().Get(0)
+
+		var commands []string
+		for _, arg := range context.Args() {
+			commands = append(commands, arg)
+		}
+
 		tty := context.Bool("ti")
-		container.Run(tty, cmd)
+		resConf := &subsystem.ResourceConfig{
+			MemoryLimit: context.String("m"),
+			CpuSet:      context.String("c"),
+			CpuShare:    context.String("cs"),
+		}
+
+		// container运行参数
+		// cmd := context.Args()[0]
+		// container.Run(tty, cmd)
+
+		subsystem.Run(tty, commands, resConf)
 		return nil
 	},
 }
