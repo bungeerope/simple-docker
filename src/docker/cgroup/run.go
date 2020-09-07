@@ -1,13 +1,14 @@
-package subsystem
+package cgroup
 
 import (
-	"github.com/bungeerope/simple-docker/src/docker/subsystem/pipline"
+	"github.com/bungeerope/simple-docker/src/docker/cgroup/subsystem"
+	"github.com/bungeerope/simple-docker/src/docker/cgroup/subsystem/pipline"
 	logger "github.com/sirupsen/logrus"
 	"os"
 	"strings"
 )
 
-func Run(tty bool, commands []string, res *ResourceConfig) {
+func Run(tty bool, commands []string, res *subsystem.ResourceConfig) {
 	parent, writePipe := pipline.NewParentProcess(tty)
 	if parent == nil {
 		logger.Errorf("New Parent Process error")
@@ -17,13 +18,14 @@ func Run(tty bool, commands []string, res *ResourceConfig) {
 		logger.Error(err)
 	}
 
-	//cgroupManager := cgroup.NewResourceConfig("simple-docker")
-	//defer cgroupManager.Destroy()
-	//cgroupManager.Set(res)
-	//cgroupManager.Apply(parent.Process.Pid)
+	cgroupManager := NewResourceConfig("simple-docker")
+	defer cgroupManager.Destroy()
+	cgroupManager.Set(res)
+	cgroupManager.Apply(parent.Process.Pid)
 	sendInitCommand(commands, writePipe)
+
 	parent.Wait()
-	os.Exit(0)
+	//os.Exit(0)
 }
 
 func sendInitCommand(commands []string, pipe *os.File) {

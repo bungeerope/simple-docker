@@ -2,8 +2,9 @@ package main
 
 import (
 	"fmt"
+	"github.com/bungeerope/simple-docker/src/docker/cgroup"
+	"github.com/bungeerope/simple-docker/src/docker/cgroup/subsystem"
 	"github.com/bungeerope/simple-docker/src/docker/container"
-	"github.com/bungeerope/simple-docker/src/docker/subsystem"
 	logger "github.com/sirupsen/logrus"
 	"github.com/urfave/cli"
 	"os"
@@ -67,7 +68,7 @@ var runCommand = cli.Command{
 		// cmd := context.Args()[0]
 		// container.Run(tty, cmd)
 
-		subsystem.Run(tty, commands, resConf)
+		cgroup.Run(tty, commands, resConf)
 		return nil
 	},
 }

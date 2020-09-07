@@ -1,7 +1,7 @@
 package cgroup
 
 import (
-	"github.com/bungeerope/simple-docker/src/docker/subsystem"
+	"github.com/bungeerope/simple-docker/src/docker/cgroup/subsystem"
 	logger "github.com/sirupsen/logrus"
 )
 

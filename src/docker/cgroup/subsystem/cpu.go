@@ -4,17 +4,17 @@ type CpuSubsystem struct {
 }
 
 func (c *CpuSubsystem) Name() string {
-	panic("implement me")
+	return ""
 }
 
 func (c *CpuSubsystem) Set(path string, res *ResourceConfig) error {
-	panic("implement me")
+	return nil
 }
 
 func (c *CpuSubsystem) Apply(path string, pid int) error {
-	panic("implement me")
+	return nil
 }
 
 func (c *CpuSubsystem) Remove(path string) error {
-	panic("implement me")
+	return nil
 }
